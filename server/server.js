@@ -3,29 +3,29 @@ if(process.env.NODE_ENV !== 'production'){
 }
 
 const express = require('express')
+const expressLayouts = require('express-ejs-layouts')
 const app = express()
-const expresslayouts = require('express-ejs-layouts')
+const path = require('path')
 
+//MONGODB CONNECTION
 const mongoose = require('mongoose')
-mongoose.connect(process.env.DB_URL,{ useNewUrlParser: true })
+mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 const db = mongoose.connection
 db.on('error', error => console.log(error))
-db.once('open', () => console.log('connected to db'))
+db.once('open', () => console.log('connected to db')) 
 
+//ROUTERS
 const indexRouter = require('./routes/index')
 
+//APP SET
 app.set('view engine', 'ejs')
-app.set('views', __dirname + '/views')
+app.set('views', path.join(__dirname,'views'))
 app.set('layout', 'layouts/layout')
-app.use(expresslayouts)
 app.use(express.static('public'))
+app.use(expressLayouts)
+app.use(express.urlencoded({ extended:false }))
 
-//Routes
-app.use('/', indexRouter)
-
-
-
-
+//ROUTES
 
 const port = process.env.SERVER_PORT || 3000
 
