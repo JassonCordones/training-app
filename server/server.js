@@ -9,9 +9,10 @@ const path = require('path')
 
 //MONGODB CONNECTION
 const mongoose = require('mongoose')
-mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
+console.log(`URI: ${process.env.DB_URL}`)
+mongoose.connect(process.env.DB_URL)
 const db = mongoose.connection
-db.on('error', error => console.log(error))
+db.on('error', error => console.error)
 db.once('open', () => console.log('connected to db')) 
 
 //ROUTERS
